@@ -10,13 +10,11 @@ class LeafTurnOnCC
     private $dcmid = '';
     private $VIN;
 
-    function __construct($userId, $password, $initialAppStrings, $dcmId, $VIN)
+    function __construct($userId, $password, $initialAppStrings)
     {
         $this->userId = $userId;
         $this->password = $password;
         $this->initialAppStrings = $initialAppStrings;
-        $this->dcmid = $dcmId;
-        $this->VIN = $VIN;
     }
 
     public function fire()
@@ -43,6 +41,10 @@ class LeafTurnOnCC
 
         $response = json_decode($content);
         $custom_sessionid = $response->VehicleInfoList->vehicleInfo[0]->custom_sessionid;
+        
+        $this->dcmid = $response->VehicleInfoList->vehicleInfo[0]->dcmId;
+        $this->VIN = $response->VehicleInfoList->vehicleInfo[0]->vin;
+        
 
         //New request
         $postBody = 'UserId=' . urlencode($this->userId) . '&cartype=&custom_sessionid=' . urlencode($custom_sessionid) . '&tz=Europe%2FCopenhagen&lg=da-DK&DCMID=' . $this->dcmid . '&VIN=' . $this->VIN . '&RegionCode=' . $this->regionCode;
@@ -68,7 +70,7 @@ class LeafTurnOnCC
 
 }
 
-$obj = new LeafTurnOnCC($argv[1], $argv[2], $argv[3], $argv[4], $argv[5]);
+$obj = new LeafTurnOnCC($argv[1], $argv[2], $argv[3]);
 $obj->fire();
 
 
