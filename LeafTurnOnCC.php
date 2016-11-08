@@ -42,8 +42,8 @@ class LeafTurnOnCC
         $response = json_decode($content);
         $custom_sessionid = $response->VehicleInfoList->vehicleInfo[0]->custom_sessionid;
         
-        $this->dcmid = $response->VehicleInfoList->vehicleInfo[0]->dcmId;
-        $this->VIN = $response->VehicleInfoList->vehicleInfo[0]->vin;
+        $this->dcmid = $response->vehicle->profile->dcmId;
+        $this->VIN = $response->vehicle->profile->vin;
         
 
         //New request
