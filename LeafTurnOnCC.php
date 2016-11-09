@@ -69,7 +69,7 @@ class LeafTurnOnCC
 
 }
 
-$obj = new LeafTurnOnCC($argv[1], $argv[2], $argv[3]);
+$obj = new LeafTurnOnCC($argv[1], $argv[2]);
 $obj->fire();
 
 
