@@ -4,17 +4,16 @@ class LeafTurnOnCC
 {
     private $userId = '';
     private $password = '';
-    private $initialAppStrings = '';
+    private $initialAppStrings = 'geORNtsZe5I4lRGjG9GZiA';
     private $lg = 'en-US';
     private $regionCode = 'NE';
     private $dcmid = '';
     private $VIN;
 
-    function __construct($userId, $password, $initialAppStrings)
+    function __construct($userId, $password)
     {
         $this->userId = $userId;
         $this->password = $password;
-        $this->initialAppStrings = $initialAppStrings;
     }
 
     public function fire()
