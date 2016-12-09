@@ -68,6 +68,24 @@ class LeafTurnOnCC
         curl_close($handle);
     }
 
+    public function encryptPassword($password)
+    {
+        if (!extension_loaded('mcrypt')) {
+            throw new Exception("mcrypt PHP extension is not loaded.");
+        }
+        $size = @call_user_func('mcrypt_get_block_size', MCRYPT_BLOWFISH);
+
+        if (empty($size)) {
+            $size = @call_user_func('mcrypt_get_block_size', MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+        }
+        $password = static::pkcs5_pad($password, $size);
+
+        $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB), MCRYPT_RAND);
+
+        $encrypted_password = mcrypt_encrypt(MCRYPT_BLOWFISH, $key, $password, MCRYPT_MODE_ECB, $iv);
+        return base64_encode($encrypted_password);
+    }
+
 }
 
 $obj = new LeafTurnOnCC($argv[1], $argv[2], $argv[3]);
