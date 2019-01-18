@@ -9,7 +9,7 @@ class LeafTurnOnCC
     private $regionCode = 'NE';
     private $dcmid = '';
     private $VIN;
-    private $baseRPM = 'uyI5Dj9g8VCOFDnBRUbr3g';
+    private $baseRPM = ''; //Indsættes fra kald til initialAppStrings
     private $customSessionID = '';
     private $tz = 'Europe/Copenhagen';
 
@@ -18,6 +18,38 @@ class LeafTurnOnCC
         $this->userId = $userId;
         $this->password = $password;
     }
+
+    public function getInitalAppStrings()
+    {
+        $params = array();
+        $params['custom_sessionid'] = $this->customSessionID;
+        $params['initial_app_strings'] = $this->initialAppStrings;
+        $params['RegionCode'] = $this->regionCode;
+        $params['lg'] = $this->lg;
+        $params['DCMID'] = $this->dcmid;
+        $params['VIN'] = $this->VIN;
+        $params['tz'] = $this->tz;
+        $url = 'https://gdcportalgw.its-mo.com/gworchest_160803EC/gdc/' . 'InitialApp.php';
+
+	$ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+
+        $result = curl_exec($ch);
+        if ($result === FALSE) {
+            die("Error during request to $url: " . curl_error($ch) . "\n");
+        }
+        curl_close($ch);
+
+        $json = json_decode($result);
+        var_export($json);
+	echo 'Indsæt følgende værdi: ' . $json->baseprm . PHP_EOL;
+	echo 'I toppen af filen som baseRPM' . PHP_EOL;
+    }
+
+
 
     public function fire()
     {
@@ -126,6 +158,7 @@ class LeafTurnOnCC
 }
 
 $obj = new LeafTurnOnCC($argv[1], $argv[2]);
-$obj->fire();
+//$obj->fire();
+$obj->getInitalAppStrings();
 
 
